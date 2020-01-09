@@ -4,25 +4,21 @@
 
 #Import-PSSession $O365Session
 
+$Listname = "Wicklow"
 
-$contactList = import-csv “C:\Users\ShaneCunningham\Desktop\Email lists\Farming.csv”
+
+$dirloc = 'C:\Users\ShaneCunningham\Desktop\Email lists\'+ $Listname +'.csv'
+
+$contactList = import-csv $dirloc
 
 foreach ($contact in $contactList){
-#$fn = ($contact."First Name".Trim())
-#$ln = ($contact."Last Name".Trim())
-#$mn = ($contact."Middle Name".Trim())
+
 $externalEmail = ($contact."E-mail Address".Trim())
 $fullname = $fn + "." + $mn + "." + $ln
 #Write-host $fullname + "Email " + $externalEmail
 #Write-Host $externalEmail
 
-Add-DistributionGroupMember -Identity "test" -Member $externalEmail
+Add-DistributionGroupMember -Identity $Listname -Member $externalEmail
 
 
 }
-
-
-
-#$fn = $_."First Name" $ln = $_."Last Name" $full = $fn + " " + $ln
-
- #import-CSV "C:\Users\ShaneCunningham\Documents\scripts\test.csv" | Foreach-Object { Add-DistributionGroupMember -Identity "test" -Member $_.Member } -WhatIf

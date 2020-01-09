@@ -13,5 +13,3 @@ New-MailContact -ExternalEmailAddress  $externalEmail -Name $fullname -FirstName
 
 
 }
-
-#$fn = $_."First Name" $ln = $_."Last Name" $full = $fn + " " + $ln
