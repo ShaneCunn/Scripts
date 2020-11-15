@@ -1,4 +1,5 @@
-﻿#Set-ExecutionPolicy RemoteSigned
+﻿#Requires -RunAsAdministrator
+#Set-ExecutionPolicy RemoteSigned
 ## Variables
 
 $fileExists = Test-Path -Path C:\Sleepless\uninstallcrap.ps1 
