@@ -18,19 +18,28 @@ $pass = Read-Host 'What is your password?' -AsSecureString
 
 
 if(!$folderExists){
-New-Item -ItemType directory -Path C:\Sleepless
+New-Item -ItemType directory -Path C:\Sleeplessrenamepc
 }
 else{
 #Write-Host "Folder exists"
 }
 
-
 Set-Location -Path C:\Sleepless
 
-
-
 callCleanBloatware
-#Get-Location
+
+
+function renamePC(){
+
+$orginalPCname = $env:COMPUTERNAME
+
+[void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
+$compName = [Microsoft.VisualBasic.Interaction]::InputBox("Enter the PC name", "Name", $orginalPCname )
+"Your name is $compName"
+
+Rename-Computer -NewName $compName
+}
+renamePC
 
 
 function callCleanBloatware(){
@@ -75,6 +84,8 @@ Write-host "Starting installer for Office 365"  -ForegroundColor Red -Background
 Start-Process C:\Sleepless\OfficeSetup.exe -Wait
 
 }
+
+
 
 
 function cleanmachine(){
