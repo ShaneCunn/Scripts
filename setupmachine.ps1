@@ -2,22 +2,15 @@
 #Set-ExecutionPolicy RemoteSigned
 ## Variables
 Set-Location -Path C:\Sleepless
-
 Start-Transcript -Path Sleeplesslog.txt -Append
-
 $fileExists = Test-Path -Path C:\Sleepless\uninstallcrap.ps1 
 $folderExists = Test-Path -Path C:\Sleepless
-
 $Username = "itservice"
 $Password = "password123!"
 $group = "Administrators"
-
 $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
 $existing = $adsi.Children | where { $_.SchemaClassName -eq 'user' -and $_.Name -eq $Username }
-
 $pass = Read-Host 'Set the Itservice password?' -AsSecureString
-
-#Write-Host "Starting script"
 
 
 function renamePC() {
@@ -26,7 +19,6 @@ function renamePC() {
 
   [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
   $compName = [Microsoft.VisualBasic.Interaction]::InputBox("Enter the PC name", "Name", $orginalPCname )
-  # "Your name is $compName"
 
   Rename-Computer -NewName $compName
 }
@@ -118,43 +110,27 @@ Get-AppxPackage -AllUsers| Foreach {Add-AppxPackage -DisableDevelopmentMode -Reg
 #>
 
 }
+
 cleanmachine
 
-
-
-
 function callSetupLocalAdmin() {
-  # Write-host "Calling local admin script"  -ForegroundColor Green
-
-
+ 
   if ($existing -eq $null) {
-
-    # Write-Host "Creating new local user $Username."
     & NET USER $Username $pass /add /y /expires:never
-    
-    # Write-Host "Adding local user $Username to $group."
     & NET LOCALGROUP $group $Username /add
 
   }
-  else {
-    #  Write-Host "Setting password for existing local user $Username."
+  else {   
     $existing.SetPassword($pass)
   }
 
-  #Write-Host "Ensuring password for $Username never expires."
   & WMIC USERACCOUNT WHERE "Name='$Username'" SET PasswordExpires=FALSE
 }
 
-
 callSetupLocalAdmin
-
 Netplwiz.exe
 
-
-
 function installOffice365() {
-  #Write-host "Starting installer for Office 365"  -ForegroundColor Red -BackgroundColor Yellow
-
   Start-Process C:\Sleepless\OfficeSetup.exe -Wait
 
 }
