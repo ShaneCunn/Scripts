@@ -1,6 +1,9 @@
 ﻿#Requires -RunAsAdministrator
 #Set-ExecutionPolicy RemoteSigned
 ## Variables
+Set-Location -Path C:\Sleepless
+
+Start-Transcript -Path Sleeplesslog.txt -Append
 
 $fileExists = Test-Path -Path C:\Sleepless\uninstallcrap.ps1 
 $folderExists = Test-Path -Path C:\Sleepless
@@ -12,19 +15,10 @@ $group = "Administrators"
 $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
 $existing = $adsi.Children | where { $_.SchemaClassName -eq 'user' -and $_.Name -eq $Username }
 
-$pass = Read-Host 'What is your password?' -AsSecureString
+$pass = Read-Host 'Set the Itservice password?' -AsSecureString
 
 #Write-Host "Starting script"
 
-
-if (!$folderExists) {
-  New-Item -ItemType directory -Path C:\Sleepless
-}
-else {
-  #Write-Host "Folder exists"
-}
-
-Set-Location -Path C:\Sleepless
 
 function renamePC() {
 
@@ -32,7 +26,7 @@ function renamePC() {
 
   [void][System.Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
   $compName = [Microsoft.VisualBasic.Interaction]::InputBox("Enter the PC name", "Name", $orginalPCname )
-  "Your name is $compName"
+  # "Your name is $compName"
 
   Rename-Computer -NewName $compName
 }
@@ -124,47 +118,54 @@ Get-AppxPackage -AllUsers| Foreach {Add-AppxPackage -DisableDevelopmentMode -Reg
 #>
 
 }
+cleanmachine
 
-function callCleanBloatware() {
-  Write-Host "Starting Bloatware script" 
 
-  cleanmachine
 
-  Write-Host "Finished bloatware script"
+
+function callSetupLocalAdmin() {
+  # Write-host "Calling local admin script"  -ForegroundColor Green
+
+
+  if ($existing -eq $null) {
+
+    # Write-Host "Creating new local user $Username."
+    & NET USER $Username $pass /add /y /expires:never
+    
+    # Write-Host "Adding local user $Username to $group."
+    & NET LOCALGROUP $group $Username /add
+
+  }
+  else {
+    #  Write-Host "Setting password for existing local user $Username."
+    $existing.SetPassword($pass)
+  }
+
+  #Write-Host "Ensuring password for $Username never expires."
+  & WMIC USERACCOUNT WHERE "Name='$Username'" SET PasswordExpires=FALSE
 }
 
 
 callSetupLocalAdmin
 
-function callSetupLocalAdmin() {
-  Write-host "Calling local admin script"  -ForegroundColor Green
-
-
-  if ($existing -eq $null) {
-
-    Write-Host "Creating new local user $Username."
-    & NET USER $Username $pass /add /y /expires:never
-    
-    Write-Host "Adding local user $Username to $group."
-    & NET LOCALGROUP $group $Username /add
-
-  }
-  else {
-    Write-Host "Setting password for existing local user $Username."
-    $existing.SetPassword($pass)
-  }
-
-  Write-Host "Ensuring password for $Username never expires."
-  & WMIC USERACCOUNT WHERE "Name='$Username'" SET PasswordExpires=FALSE
-}
-
 Netplwiz.exe
 
-installOffice365
+
 
 function installOffice365() {
-  Write-host "Starting installer for Office 365"  -ForegroundColor Red -BackgroundColor Yellow
+  #Write-host "Starting installer for Office 365"  -ForegroundColor Red -BackgroundColor Yellow
 
   Start-Process C:\Sleepless\OfficeSetup.exe -Wait
 
 }
+
+function installApps() {
+  
+  Start-Process C:\Sleepless\apps.exe 
+
+}
+
+installApps
+installOffice365
+
+Stop-Transcript
