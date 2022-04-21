@@ -29,7 +29,7 @@ Set-Location -Path C:\Sleepless
 
 
 
-callCleanBloatware
+#callCleanBloatware
 #Get-Location
 
 
@@ -41,7 +41,7 @@ cleanmachine
 Write-Host "Finished bloatware script"
 }
 
-callSetupLocalAdmin
+#callSetupLocalAdmin
 
 function callSetupLocalAdmin(){
 Write-host "Calling local admin script"  -ForegroundColor Green
@@ -65,9 +65,9 @@ Write-Host "Ensuring password for $Username never expires."
 & WMIC USERACCOUNT WHERE "Name='$Username'" SET PasswordExpires=FALSE
 }
 
-Netplwiz.exe
+#Netplwiz.exe
 
-installOffice365
+#installOffice365
 
 function installOffice365(){
 Write-host "Starting installer for Office 365"  -ForegroundColor Red -BackgroundColor Yellow
@@ -76,7 +76,26 @@ Start-Process C:\Sleepless\OfficeSetup.exe -Wait
 
 }
 
+installApps
+function installApps(){
 
+#Start-Process C:\Sleepless\basicInstaller.exe
+
+Write-Host "test"
+
+
+$Prompt = Read-host "Should I display the file contents c:\test for you? (Y | N)" 
+Switch ($Prompt)
+     {
+       Y {Get-ChildItem C:\Sleepless}
+       N {Write-Host "User canceled the request"}
+       Default {installApps}
+     }
+
+}
+
+y
+y
 function cleanmachine(){
 <#
   This is a helpful script that will remove the default Windows 10 garbage from your computer
