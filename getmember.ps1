@@ -10,4 +10,6 @@ $Mailbox = Get-Mailbox | Where {$_.PrimarySmtpAddress -eq $UserEmail}
 
 #$Office365GroupsMember = Get-UnifiedGroup | where { (Get-UnifiedGroupLinks $_.Alias -LinkType Members | foreach {$_.name}) -contains $mailbox.Alias}
 
-$Office365GroupsOwner = Get-UnifiedGroup | where { (Get-UnifiedGroupLinks $_.Alias -LinkType Owners| foreach {$_.name}) -contains $mailbox.Alias}
+#$Office365GroupsOwner = Get-UnifiedGroup | where { (Get-UnifiedGroupLinks $_.Alias -LinkType Owners| foreach {$_.name}) -contains $mailbox.Alias}
+
+Enable-OrganizationCustomization
