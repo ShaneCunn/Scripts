@@ -9,14 +9,6 @@
 .INPUTS
     None
 
-.NOTES
-    Version       : 1.0
-    Author        : Michael Mardahl
-    Twitter       : @michael_mardahl
-    Blogging on   : www.msendpointmgr.com
-    Creation Date : 11 January 2021
-    Purpose/Change: Initial script
-    License       : MIT (Leave author credits)
 
 .EXAMPLE
     Execute script as system or administrator
