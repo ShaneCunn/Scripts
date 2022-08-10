@@ -7,6 +7,7 @@ $localprograms = choco list --localonly
 ##checks if program is installed, then if installed upgrade program
 if ($localprograms -like "*googlechrome*")
 {
+	##upgrades chrome to latest version
     choco upgrade googlechrome
 }
 Else
