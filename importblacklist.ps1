@@ -9,7 +9,7 @@
 
 
  
-$emails =  "C:\Users\ShaneCunninghamSleep\Sleepless Server Solutions Ltd\Projects - Documents\Chanelle - Public Folders Migration\testlist.csv" # EDIT THIS
+$emails =  "C:\Users\ShaneCunninghamSleep\Sleepless Server Solutions Ltd\Projects - Documents\Chanelle - Public Folders Migration\Chanelle1.csv" # EDIT THIS
  
 $count = 1
 foreach ($content in ($total = get-content $emails)){
